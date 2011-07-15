@@ -1,7 +1,12 @@
+/* Family analysis */
+/* By Ben Crowder */
+
 function Family() {
 	this.father;
 	this.mother;
 	this.children = [];
+
+	// used for generating the timeline
 	this.firstChildBirthDate;
 	this.lastChildBirthDate;
 	this.firstDate;
@@ -9,12 +14,15 @@ function Family() {
 	this.canvas;
 	this.context;
 
+	// load a person's info from the sidebar
 	this.getPerson = function(slug) {
 		var person = new Person();
 		person.name = $("#" + slug + "_name").val();
 		person.firstName = getFirstName(person.name);
+
 		person.birth = $("#" + slug + "_birth").val();
 		person.birthDate = parseInt(getYear(person.birth));
+
 		person.death = $("#" + slug + "_death").val();
 		person.deathDate = parseInt(getYear(person.death));
 		if (!person.deathDate) {
@@ -36,6 +44,7 @@ function Family() {
 		return person;
 	}
 
+	// go through the children
 	this.addChild = function(slug) {
 		var child = this.getPerson(slug);
 
@@ -48,6 +57,7 @@ function Family() {
 		}
 	}
 
+	// load the data from the parents and children
 	this.load = function() {
 		this.father = this.getPerson("father");
 		this.mother = this.getPerson("mother");
@@ -60,15 +70,17 @@ function Family() {
 			family.addChild($(this).attr("id"));
 		});
 
+		// update the first and last dates for the timeline
 		this.updateDateBoundaries();
 	}
 
+	// analyze the relationships
 	this.analyze = function() {
 		var fatherHTML = '';
 		var motherHTML = '';
 		var childHTML = [];
 
-		// update names
+		// update names and lifespans
 		$("#results_father_name").html(this.father.name);
 		$("#results_mother_name").html(this.mother.name);
 
@@ -78,14 +90,14 @@ function Family() {
 		$("#father_lifespan").html(this.father.lifespan);
 		$("#mother_lifespan").html(this.mother.lifespan);
 
-		// Marriage length
+		// marriage length
 		var marriageLength = this.getMarriageLength();
 		if (marriageLength == 0) {
 			marriageLength = "an unknown number of ";
 		}
 		$("#results_marriage_length").html(marriageLength + " years");
 
-		// Number of children
+		// number of children
 		var childrenHTML = "They had ";
 		switch (this.children.length) {
 			case 0: childrenHTML += "<span class='age'>no children</span>."; break;
@@ -97,7 +109,7 @@ function Family() {
 		var fatherEvents = [];
 		var motherEvents = [];
 
-		// Age of parents at birth of each other
+		// age of parents at birth of each other
 		var ageAtBirths = ageAtBirth(this.father, this.mother);
 		if (ageAtBirths.person1) {
 			fatherEvents.push({ event: 'birth', name: 'Wife', age: ageAtBirths.person1, year: this.mother.birthDate });
@@ -105,7 +117,7 @@ function Family() {
 			motherEvents.push({ event: 'birth', name: 'Husband', age: ageAtBirths.person2, year: this.father.birthDate });
 		}
 
-		// Ages at marriage
+		// ages at marriage
 		var marriageAges = agesAtMarriage(this);
 		if (this.marriageDate) {
 			if (this.father.firstName) {
@@ -116,7 +128,7 @@ function Family() {
 			}
 		}
 
-		// Ages at death (spouses)
+		// ages at death (spouses)
 		var ageAtDeaths = ageAtDeath(this.father, this.mother);
 		if (ageAtDeaths.person1) {
 			fatherEvents.push({ event: 'death', name: 'Wife', age: ageAtDeaths.person1, year: this.mother.deathDate });
@@ -124,7 +136,7 @@ function Family() {
 			motherEvents.push({ event: 'death', name: 'Husband', age: ageAtDeaths.person2, year: this.father.deathDate });
 		}
 
-		// Ages at birth of children
+		// ages at birth of children
 		for (var c in this.children) {
 			var child = this.children[c];
 
@@ -139,7 +151,7 @@ function Family() {
 			}
 		}
 
-		// Ages at death of children
+		// ages at death of children
 		for (var c in this.children) {
 			var child = this.children[c];
 
@@ -157,7 +169,7 @@ function Family() {
 		fatherEvents.sort(sortArray);
 		motherEvents.sort(sortArray);
 
-		// Parse parents' info and create HTML
+		// parse parents' info and create HTML
 		if (fatherEvents.length > 0) {
 			for (var e in fatherEvents) {
 				var s = (fatherEvents[e].age == 1) ? '' : 's';
@@ -185,17 +197,16 @@ function Family() {
 			motherHTML = "<tr><td class='event'>No events available</td><td></td></tr>";
 		}
 
-		// And put the HTML in
+		// and put the HTML in
 		$("#father_results").html(fatherHTML);
 		$("#mother_results").html(motherHTML);
 
-
-		// Now parse children's info
+		// now parse children's info
 		for (var c in this.children) {
 			var childEvents = [];
 			var child = this.children[c];
 
-			// Add siblings' births
+			// add siblings' births
 			for (var sibling in this.children) {
 				if (c != sibling) {
 					birthAges = ageAtBirth(child, this.children[sibling]);
@@ -205,7 +216,7 @@ function Family() {
 				}
 			}
 
-			// Add siblings' deaths
+			// add siblings' deaths
 			for (var sibling in this.children) {
 				if (c != sibling) {
 					deathAges = ageAtDeath(child, this.children[sibling]);
@@ -215,7 +226,7 @@ function Family() {
 				}
 			}
 
-			// Add parents' deaths
+			// add parents' deaths
 			if (this.father.deathDate) {
 				deathAges = ageAtDeath(child, this.father);
 				if (deathAges.person1) {
@@ -229,10 +240,10 @@ function Family() {
 				}
 			}
 
-			// Sort the array
-			childEvents.sort(function(a, b) { return a.age - b.age });
+			// sort the array
+			childEvents.sort(sortArray);
 
-			// Parse it and create HTML
+			// parse it and create HTML
 			var childNum = parseInt(c) + 1;
 			var childObject = $("#child" + childNum + "_results");
 			if (childEvents.length > 0) {
@@ -245,23 +256,26 @@ function Family() {
 			}
 			childObject.html(childHTML[c]);
 
-			// And update the name
+			// and update the name
 			$("#child" + childNum + "_label").html(child.name);
 			$("#child" + childNum + "_lifespan").html(child.lifespan);
 		}
 	}
 
+	// update the global first/last dates based off this person's info
 	this.updateDateBracket = function(person) {
 		if (person.birthDate < this.firstDate) { this.firstDate = person.birthDate; }
 		if (person.deathDate > this.lastDate) { this.lastDate = person.deathDate; }
 		if (person.lastDate > this.lastDate) { this.lastDate = person.lastDate; }			// for people still living
 	}
 
+	// update global child first/last dates
 	this.updateChildDateBracket = function(child) {
 		if (child.birthDate < this.firstChildBirthDate) { this.firstChildBirthDate = child.birthDate; }
 		if (child.birthDate > this.lastChildBirthDate) { this.lastChildBirthDate = child.birthDate; }
 	}
 
+	// load first/last dates
 	this.updateDateBoundaries = function() {
 		this.firstChildBirthDate = 5000;
 		this.lastChildBirthDate = -5000;
@@ -276,6 +290,7 @@ function Family() {
 		}
 	}
 
+	// get marriage length for the parents
 	this.getMarriageLength = function() {
 		var marriage_length = 0;
 		if (this.father.deathDate || this.mother.deathDate) {
@@ -294,6 +309,7 @@ function Family() {
 		}
 	}
 
+	// draw the bar for a person (on the timeline)
 	this.drawPersonBar = function(person, y) {
 		if (!person) {
 			console.log("Undefined");
@@ -340,7 +356,7 @@ function Family() {
 			c.closePath();
 		}
 
-		// Draw the name
+		// draw the name
 		c.font = "bold 9px helvetica";
 		c.textAlign = "right";
 		c.textBaseline = "middle";
@@ -352,39 +368,7 @@ function Family() {
 		c.closePath();
 	}
 
-	this.drawPersonBarOldStyle = function(person, y) {
-		if (!person) {
-			console.log("Undefined");
-			return;
-		}
-
-		cv = this.canvas;
-		c = this.context;
-		c.beginPath();
-
-		c.fillStyle = "rgba(0, 0, 0, 0.6)";
-
-		startX = (person.birthDate - this.firstDecade) * (cv.width / this.timeSpan);
-		if (person.deathDate) {
-			barWidth = (person.deathDate - person.birthDate) * (cv.width / this.timeSpan);
-		} else {
-			// go to the end if they're not dead
-			barWidth = 8;
-		}
-
-		drawRoundRect(c, startX, y, barWidth, 10, true);
-
-		c.font = "bold 9px helvetica";
-		c.textAlign = "right";
-		c.textBaseline = "top";
-		c.fillStyle = "#930";
-		c.strokeStyle = "#fff";
-		c.lineWidth = 3;
-		c.strokeText(person.firstName, startX - 5, y);
-		c.fillText(person.firstName, startX - 5, y);
-		c.closePath();
-	}
-
+	// draw the whole timeline
 	this.drawTimeline = function() {
 		cv = this.canvas;
 		c = this.context;
@@ -465,11 +449,14 @@ function Family() {
 	}
 }
 
+// empty class
 function Person() { }
 
+
 /* Utility functions */
+/* -------------------------------------------------- */
 
-
+// get first name (based off full name)
 function getFirstName(name) {
 	match = /^([^ ]+)/.exec(name);
 
@@ -480,6 +467,7 @@ function getFirstName(name) {
 	}
 }
 
+// take a date and extract the year
 function getYear(datestr) {
 	if (!datestr) return false;
 
@@ -514,6 +502,7 @@ function ageAtBirth(person1, person2) {
 	}
 }
 
+// age of person1 at death of person2
 function ageAtDeath(person1, person2) {
 	p1birthYear = getYear(person1.birth);
 	p1deathYear = getYear(person1.death);
@@ -539,6 +528,7 @@ function ageAtDeath(person1, person2) {
 	}
 }
 
+// get ages of parents at their marriage
 function agesAtMarriage(family) {
 	husband = family.father;
 	wife = family.mother;
@@ -561,43 +551,28 @@ function agesAtMarriage(family) {
 	}
 }
 
+// take an integer age and put it into an "x year(s)" string
 function getAgeString(age) {
 	var s = (age == 1) ? '' : 's';
 	return age + " year" + s;
 }
 
+// generate the analysis HTML for an event
 function getEventHTML(title, year, age) {
 	html = "<tr><td class='event'>" + title + " <span class='eventyear'>(" + year + ")</span></td>";
 	html += "<td class='age'>" + getAgeString(age) + "</td></tr>";
 	return html;
 }
 
-function drawRoundRect(c, x, y, width, height, fill) {
-	var radius = 5;
-
-	c.beginPath();
-	c.moveTo(x + radius, y);
-	c.lineTo(x + width - radius, y);
-	c.quadraticCurveTo(x + width, y, x + width, y + radius);
-
-	c.lineTo(x + width, y + height - radius);
-	c.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-
-	c.lineTo(x + radius, y + height);
-	c.quadraticCurveTo(x, y + height, x, y + height - radius);
-
-	c.lineTo(x, y + radius);
-	c.quadraticCurveTo(x, y, x + radius, y);
-
-	c.closePath();
-	c.fill();
-}
-
+// used for sorting arrays
 function sortArray(a, b) {
 	return a.age - b.age
 };
 
+
+
 $(document).ready(function() {
+	// set up the canvas
 	var canvas = document.getElementById("timeline");
 	canvas.width = $("#timeline").width();
 	canvas.height = $("#timeline").height();
@@ -605,15 +580,18 @@ $(document).ready(function() {
 		var context = canvas.getContext('2d');
 	}
 
+	// set up the family
 	var family = new Family();
 	family.canvas = canvas;
 	family.context = context;
 	family.run();
 
+	// click handlers
 	$("#sidebar input").change(function() {
 		family.run();
 	});
 
+	// for removing children
 	$(".remove_button").click(function() {
 		var child_id = $(this).parent().attr("id");
 		$(this).parent().remove();					// remove from sidebar
@@ -645,11 +623,12 @@ $(document).ready(function() {
 		family.run();
 	});
 
+	// click handler for "add a new child" link
 	$(".addlink a").click(function() {
-		// Get new child ID
+		// get new child ID
 		var new_id = $("#sidebar .child").length + 1;
 
-		// Add new element
+		// add new element
 		var html = "<div id='child" + new_id + "' class='person child'>\n";
 		html += "<span class='remove_button'>x</span>\n";
 		html += "<h2>Child</h2>\n";
