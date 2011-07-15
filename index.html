@@ -1,0 +1,183 @@
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+	<title>Family Analysis</title>
+
+	<link rel="stylesheet" href="style.css" type="text/css" media="screen, print" charset="utf-8">
+	<link rel="stylesheet" href="canvas.css" type="text/css" media="screen" charset="utf-8">
+	<link rel="stylesheet" href="print.css" type="text/css" media="print" charset="utf-8">
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
+	<script src="family.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div id="page">
+		<section id="sidebar">
+			<div class="person">
+				<h2>Father</h2>
+
+				<section class="textbox">
+					<label>Name</label>
+					<input type="text" id="father_name" name="father_name" value="John Doe" />
+				</section>
+
+				<div class="row">
+					<section class="textbox small birth">
+						<label>Birth</label>
+						<input type="text" id="father_birth" name="father_birth" value="1884" />
+					</section>
+
+					<section class="textbox small death">
+						<label>Death</label>
+						<input type="text" id="father_death" name="father_death" value="1970" />
+					</section>
+				</div>
+
+				<section class="textbox small long">
+					<label>Marriage</label>
+					<input type="text" id="father_marriage" name="father_marriage" value="19 Dec 1918" />
+				</section>
+			</div>
+
+			<div class="person">
+				<h2>Mother</h2>
+
+				<section class="textbox">
+					<label>Name</label>
+					<input type="text" id="mother_name" name="mother_name" value="Jane Smith" />
+				</section>
+
+				<div class="row">
+					<section class="textbox small birth">
+						<label>Birth</label>
+						<input type="text" id="mother_birth" name="mother_birth" value="4 Feb 1887" />
+					</section>
+
+					<section class="textbox small death">
+						<label>Death</label>
+						<input type="text" id="mother_death" name="mother_death" value="1944" />
+					</section>
+				</div>
+			</div>
+
+			<div id="child1" class="person child">
+				<span class="remove_button">x</span>
+				<h2>Child</h2>
+
+				<section class="textbox">
+					<label>Name</label>
+					<input type="text" id="child1_name" class="person_name" name="child1_name" value="Albert" />
+				</section>
+
+				<div class="row">
+					<section class="textbox small birth">
+						<label>Birth</label>
+						<input type="text" id="child1_birth" class="person_birth" name="child1_birth" value="19 Dec 1919" />
+					</section>
+
+					<section class="textbox small death">
+						<label>Death</label>
+						<input type="text" id="child1_death" class="person_death" name="child1_death" value="7 Apr 2009" />
+					</section>
+				</div>
+			</div>
+
+			<div id="child2" class="person child">
+				<span class="remove_button">x</span>
+				<h2>Child</h2>
+
+				<section class="textbox">
+					<label>Name</label>
+					<input type="text" id="child2_name" class="person_name" name="child2_name" value="Rachel" />
+				</section>
+
+				<div class="row">
+					<section class="textbox small birth">
+						<label>Birth</label>
+						<input type="text" id="child2_birth" class="person_birth" name="child2_birth" value="2 Feb 1923" />
+					</section>
+
+					<section class="textbox small death">
+						<label>Death</label>
+						<input type="text" id="child2_death" class="person_death" name="child2_death" value="1927" />
+					</section>
+				</div>
+			</div>
+
+			<div id="child3" class="person child">
+				<span class="remove_button">x</span>
+				<h2>Child</h2>
+
+				<section class="textbox">
+					<label>Name</label>
+					<input type="text" id="child3_name" name="child3_name" class="person_name" value="William" />
+				</section>
+
+				<div class="row">
+					<section class="textbox small birth">
+						<label>Birth</label>
+						<input type="text" id="child3_birth" name="child3_birth" class="person_birth" value="10 Feb 1925" />
+					</section>
+
+					<section class="textbox small death">
+						<label>Death</label>
+						<input type="text" id="child3_death" name="child3_death" class="person_death" value="1995" />
+					</section>
+				</div>
+			</div>
+
+			<div class="person addlink">
+				<a href="#">Add new child</a>
+			</div>
+		</section>
+
+		<section id="content">
+			<h1>Analysis: Family of <span id="results_father_name">Antonio San Emeterio</span> and <span id="results_mother_name">Maria Natividad Sanchez</span></h1>
+
+			<h2>Timeline</h2>
+			<canvas id="timeline" width="100%" height="100px" resize="true"></canvas>
+
+			<h2>General</h2>
+			<p>Their marriage lasted <span id="results_marriage_length" class="age"></span>. <span id="results_children"></span></p>
+
+			<div id="container">
+				<div id="parents_container">
+					<h2 id="father_label"></h2>
+					<h3 id="father_lifespan"></h3>
+					<table id="father_results" class="analysis" cellspacing="0"></table>
+
+					<h2 id="mother_label"></h2>
+					<h3 id="mother_lifespan"></h3>
+					<table id="mother_results" class="analysis" cellspacing="0"></table>
+				</div>
+
+				<div id="children_container">
+					<div id="child1_analysis">
+						<h2 id="child1_label"></h2>
+						<h3 id="child1_lifespan"></h3>
+						<table id="child1_results" class="analysis" cellspacing="0"></table>
+					</div>
+
+					<div id="child2_analysis">
+						<h2 id="child2_label"></h2>
+						<h3 id="child2_lifespan"></h3>
+						<table id="child2_results" class="analysis" cellspacing="0"></table>
+					</div>
+
+					<div id="child3_analysis">
+						<h2 id="child3_label"></h2>
+						<h3 id="child3_lifespan"></h3>
+						<table id="child3_results" class="analysis" cellspacing="0"></table>
+					</div>
+
+					<div id="child4_analysis">
+						<h2 id="child4_label"></h2>
+						<h3 id="child4_lifespan"></h3>
+						<table id="child4_results" class="analysis" cellspacing="0"></table>
+					</div>
+				</div>
+		</section>
+	</div>
+</body>
+</html>

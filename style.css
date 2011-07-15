@@ -1,0 +1,59 @@
+body					{ padding: 50px 0; font-family: "Lucida Grande", Helvetica, Arial, sans-serif; }
+
+#page					{ width: 1000px; margin: 0px auto; overflow: hidden; clear: both; }
+
+#sidebar				{ width: 25%; float: left; }
+#content				{ width: 65%; margin-left: 10%; float: left; }
+
+
+/* Sidebar */
+/* -------------------------------------------------- */
+
+.person + .person		{ border-top: dotted 1px #bbb; margin-top: 1em; }
+.person h2				{ font-size: 14px; margin: 1em 0 .5em 0; color: #345678; }
+.person > a				{ margin-top: 1em; font-size: .7em; color: #666; display: inline-block; }
+
+.textbox				{ position: relative; }
+.textbox label			{ font-size: 9px; position: absolute; z-index: 50; top: 4px; left: 4px; font-weight: normal; color: #666; } 
+.textbox input[type="text"]	{ border: solid 1px #bbb; padding: 1px; padding-left: 52px; font-weight: bold; font-size: .8em; width: 250px; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; -webkit-box-shadow: 47px 0 0 #ddd inset; }
+.textbox input[type="text"]:focus	{ outline: none; }
+
+.textbox.small input	{ font-size: .55em; padding: 2px; padding-left: 52px; width: 120px; margin-bottom: 2px; }
+.textbox.small label	{ top: 2px; }
+.textbox.long input		{ width: 250px; }
+
+.row					{ overflow: hidden; clear: both; }
+.row .textbox			{ float: left; }
+.row .textbox:first-child	{ margin-right: 10px; }
+
+.remove_button			{ float: right; font-size: 10px; color: #999; margin-top: 1.5em; background: #eee; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; padding: 0px 3px; }
+.remove_button:hover	{ background: #ddd; cursor: pointer; }
+
+
+/* Analysis */
+/* -------------------------------------------------- */
+
+#content				{ font-size: .8em; }
+
+#content h1				{ font-size: 12px; color: #999; margin-bottom: 1em; padding-bottom: .2em; border-bottom: solid 1px #999; }
+#content h2				{ font-size: 14px; color: #345678; margin: 1.5em 0 .5em 0; }
+
+#container				{ overflow: hidden; clear: both; }
+#parents_container		{ width: 45%; float: left; }
+#children_container		{ width: 45%; margin-left: 10%; float: left; }
+
+table.analysis			{ font-size: 12px; padding: 0; width: 100%; line-height: 1.3em; margin: 0; margin-bottom: 2.5em; }
+table.analysis th		{ text-align: left; padding: 6px 0; border-bottom: solid 1px #999; color: #999; }
+table.analysis td		{ padding: 6px 0; border-bottom: solid 1px #ddd; color: #444; vertical-align: top; }
+table.analysis td.event	{ font-size: 1.1em; color: #000; width: 70%; }
+table.analysis td.age	{ color: #930; font-weight: bold; font-size: 1.1em; }
+
+table.analysis td ul	{ list-style: none; padding: 0; margin: 0; }
+table.analysis td li	{ display: inline-block; margin-right: 15px; line-height: 1.5em; }
+
+.age					{ color: #930; font-weight: bold; }
+
+.eventyear				{ color: #999; }
+
+#content #container h2	{ margin-bottom: 0; }
+#content #container h3	{ margin: .25em 0 .5em 0; font-weight: normal; font-size: .7em; color: #999; }
