@@ -1,18 +1,30 @@
 body					{ font-family: "Lucida Grande", Helvetica, Arial, sans-serif; }
 
-#sidebar				{ width: 100%; float: none; clear: both; overflow: hidden; }
+#sidebar				{ width: 100%; float: none; clear: both; overflow: hidden; border-bottom: solid 1px #999; padding-bottom: .5em; margin-top: 1em; }
 
 #content				{ width: 100%; margin-left: 0%; float: none; }
 #timeline				{ width: auto; height: auto; }
 
-.person					{ float: left; margin-bottom: .5em; }
+.person					{ float: left; margin-bottom: .65em; }
 .person + .person		{ border-top: none; margin-left: .5em; margin-top: 0; }
-.person h2				{ font-size: 12px; }
+
+.person h2				{ font-size: 12px; display: inline; }
+.person h2:after		{ content: ': '; }
+.person h2 + section.textbox	{ display: inline; }
+
 .person.addlink			{ display: none; }
 
-.textbox label			{ left: 0px; } 
-.textbox input[type="text"]	{ border: none; padding: 0; padding-left: 52px; border-radius: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; }
+.textbox				{ position: auto; display: inline; }
+.textbox label			{ top: 0; left: 0; display: none; position: relative; } 
+.textbox input[type="text"]	{ border: none; padding: 0; padding-left: 0px; border-radius: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; }
+.textbox.small label			{ display: inline; color: #000; top: 0; }
+.textbox.small label:after		{ content: ': '; }
+.textbox.small input	{ padding-left: 0; width: auto; }
 
 .remove_button			{ display: none; }
 
-#content				{ font-size: .9em; }
+#content h1				{ position: absolute; top: 0; width: 100%; font-size: 1.8em; margin: 1em 0 1.5em 0; color: #000; font-weight: normal; font-family: Georgia, serif; }
+#content h2				{ font-size: 1.2em; }
+
+.eventyear				{ color: #bbb; }
+.row					{ overflow: auto; clear: none; }
