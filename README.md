@@ -1,3 +1,3 @@
 ## Family analysis
 
-A simple Javascript-based tool for analyzing family relationships.
+A simple Javascript-based proof-of-concept for analyzing family relationships.
